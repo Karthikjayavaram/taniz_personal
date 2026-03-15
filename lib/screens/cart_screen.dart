@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:tanizkart/models/cart_item.dart';
+import 'package:tanizkart/screens/checkout_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -9,29 +11,29 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  // Sample data for the cart with reliable image URLs
-  final List<Map<String, dynamic>> cartItems = [
-    {
-      "name": "Fresh Tomato",
-      "price": 31.18,
-      "weight": "500g",
-      "image": "https://images.unsplash.com/photo-1582284540020-8acbe03f4924?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "selected": true,
-    },
-    {
-      "name": "Broccoli",
-      "price": 23.18,
-      "weight": "500g",
-      "image": "https://images.unsplash.com/photo-1584270354949-c26b0d5b4a0c?auto=format&fit=crop&q=80&w=150",
-      "selected": true,
-    },
-    {
-      "name": "Eggs",
-      "price": 20.18,
-      "weight": "6 items",
-      "image": "https://images.unsplash.com/photo-1639194335563-d56b83f0060c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZWdnc3xlbnwwfHwwfHx8MA%3D%3D",
-      "selected": false,
-    },
+  // Cart items using the CartItem model
+  final List<CartItem> cartItems = [
+    CartItem(
+      name: "Fresh Tomato",
+      price: 31.18,
+      weight: "500g",
+      image: "https://images.unsplash.com/photo-1582284540020-8acbe03f4924?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      selected: true,
+    ),
+    CartItem(
+      name: "Broccoli",
+      price: 23.18,
+      weight: "500g",
+      image: "https://images.unsplash.com/photo-1584270354949-c26b0d5b4a0c?auto=format&fit=crop&q=80&w=150",
+      selected: true,
+    ),
+    CartItem(
+      name: "Eggs",
+      price: 20.18,
+      weight: "6 items",
+      image: "https://images.unsplash.com/photo-1639194335563-d56b83f0060c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZWdnc3xlbnwwfHwwfHx8MA%3D%3D",
+      selected: false,
+    ),
   ];
 
   String selectedPaymentMethod = "UPI";
@@ -41,8 +43,8 @@ class _CartScreenState extends State<CartScreen> {
 
   double get totalAmount {
     return cartItems
-        .where((item) => item['selected'] == true)
-        .fold(0, (sum, item) => sum + item['price']);
+        .where((item) => item.selected)
+        .fold(0.0, (sum, item) => sum + item.price);
   }
 
   void _removeItem(int index) {
@@ -82,7 +84,7 @@ class _CartScreenState extends State<CartScreen> {
                   child: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
@@ -106,7 +108,7 @@ class _CartScreenState extends State<CartScreen> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -158,12 +160,12 @@ class _CartScreenState extends State<CartScreen> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha: 0.05),
                             blurRadius: 10,
                             offset: const Offset(0, 5),
                           ),
                         ],
-                        border: Border.all(color: Colors.grey.withOpacity(0.1)),
+                        border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
                       ),
                       child: Row(
                         children: [
@@ -171,7 +173,7 @@ class _CartScreenState extends State<CartScreen> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(15),
                             child: Image.network(
-                              item['image'],
+                              item.image,
                               width: 60,
                               height: 60,
                               fit: BoxFit.cover,
@@ -194,7 +196,7 @@ class _CartScreenState extends State<CartScreen> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  item['name'],
+                                  item.name,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
@@ -203,7 +205,7 @@ class _CartScreenState extends State<CartScreen> {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 Text(
-                                  item['weight'],
+                                  item.weight,
                                   style: TextStyle(
                                     color: Colors.grey[600],
                                     fontSize: 12,
@@ -234,14 +236,14 @@ class _CartScreenState extends State<CartScreen> {
                                     height: 24,
                                     width: 24,
                                     child: Checkbox(
-                                      value: item['selected'],
+                                      value: item.selected,
                                       activeColor: const Color(0xFF041AA5),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(4),
                                       ),
                                       onChanged: (value) {
                                         setState(() {
-                                          item['selected'] = value;
+                                          item.selected = value ?? false;
                                         });
                                       },
                                     ),
@@ -250,7 +252,7 @@ class _CartScreenState extends State<CartScreen> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                "₹${item['price']}",
+                                "₹${item.price.toStringAsFixed(2)}",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xFF041AA5),
@@ -273,7 +275,7 @@ class _CartScreenState extends State<CartScreen> {
                       color: const Color(0xFFF5F6FF),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                          color: const Color(0xFF041AA5).withOpacity(0.1)),
+                          color: const Color(0xFF041AA5).withValues(alpha: 0.1)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -387,7 +389,7 @@ class _CartScreenState extends State<CartScreen> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 20,
                   offset: const Offset(0, -5),
                 ),
@@ -421,7 +423,26 @@ class _CartScreenState extends State<CartScreen> {
                   width: double.infinity,
                   height: 60,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      final selectedItems =
+                          cartItems.where((item) => item.selected).toList();
+                      if (selectedItems.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please select at least one item to checkout.'),
+                            backgroundColor: Color(0xFF041AA5),
+                          ),
+                        );
+                        return;
+                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              CheckoutScreen(items: selectedItems),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF041AA5),
                       shape: RoundedRectangleBorder(
@@ -549,10 +570,10 @@ class _CartScreenState extends State<CartScreen> {
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF041AA5).withOpacity(0.05) : Colors.white,
+          color: isSelected ? const Color(0xFF041AA5).withValues(alpha: 0.05) : Colors.white,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
-            color: isSelected ? const Color(0xFF041AA5) : Colors.grey.withOpacity(0.2),
+            color: isSelected ? const Color(0xFF041AA5) : Colors.grey.withValues(alpha: 0.2),
             width: isSelected ? 2 : 1,
           ),
         ),

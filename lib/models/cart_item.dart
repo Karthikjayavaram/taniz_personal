@@ -5,6 +5,7 @@ class CartItem {
     required this.weight,
     required this.image,
     this.selected = true,
+    this.quantity = 1,
   });
 
   final String name;
@@ -12,6 +13,10 @@ class CartItem {
   final String weight;
   final String image;
   bool selected;
+  int quantity;
+
+  /// Price × quantity
+  double get subtotal => price * quantity;
 
   CartItem copy() {
     return CartItem(
@@ -20,6 +25,7 @@ class CartItem {
       weight: weight,
       image: image,
       selected: selected,
+      quantity: quantity,
     );
   }
 }
