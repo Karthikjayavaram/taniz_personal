@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:tanizkart/screens/categories_screen.dart';
 import 'package:tanizkart/screens/store_screen.dart';
 import 'package:tanizkart/screens/cart_screen.dart';
 
@@ -15,11 +14,11 @@ class _MainScreenState extends State<MainScreen> {
   int selectedIndex = 0;
 
   final List<Widget> pages = const [
-    Placeholder(),
-    StoreScreen(),
-    CategoriesScreen(),
-    CartScreen(),
-    Placeholder(),
+    Placeholder(), // Home
+    StoreScreen(), // Store
+    Placeholder(), // Reels
+    CartScreen(),  // Cart
+    Placeholder(), // Account
   ];
 
   @override
